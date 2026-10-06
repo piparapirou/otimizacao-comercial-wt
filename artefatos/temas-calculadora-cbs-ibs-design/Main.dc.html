@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Catálogo de temas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=Courier+Prime:wght@400;700&amp;family=Source+Sans+3:wght@400;600;700&amp;family=Source+Code+Pro:wght@400;600&amp;family=Atkinson+Hyperlegible:wght@400;700&amp;family=Atkinson+Hyperlegible+Mono:wght@400;600&amp;family=Figtree:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;family=Bricolage+Grotesque:wght@400;600;700&amp;family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;600;700&amp;family=Sora:wght@400;600;700&amp;family=Work+Sans:wght@400;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0d5c55}a:hover{color:#093f3a}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2860px; box-sizing: border-box; padding: 72px 80px; background: #e9ecea; color: #16211e; font-family: 'Instrument Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 40px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; border-bottom: 2px solid #16211e; padding-bottom: 24px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #0d5c55">Calculadora CBS/IBS de Compras</div>
+      <h1 style="margin: 0; font-size: 56px; line-height: 1.05; letter-spacing: -0.01em">Temas de cores</h1>
+      <p style="margin: 0; font-size: 18px; color: #53635e; max-width: 760px">Três temas de referência e sete novos. Cada um traz a mesma tela aplicada: a resposta, um seletor, um campo e um aviso.</p>
+    </div>
+    <div style="display: flex; gap: 16px; font-size: 14px; color: #53635e">
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 50%; background: #53635e; display: block"></span>Referência</div>
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 50%; background: #0d5c55; display: block"></span>Novo</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+    <sc-for list="{{temas}}" as="t" hint-placeholder-count="10">
+      <div style="background: #ffffff; border: 1px solid #cfd6d2; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column">
+        <div style="padding: 20px 24px 16px; display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <h2 style="margin: 0; font-size: 24px">{{t.nome}}</h2>
+            <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: {{t.tagBg}}; color: {{t.tagInk}}">{{t.tag}}</span>
+          </div>
+          <p style="margin: 0; font-size: 15px; color: #53635e">{{t.uso}}</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 0 24px 16px">
+          <sc-for list="{{t.chips}}" as="c" hint-placeholder-count="6">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <div style="height: 36px; border-radius: 6px; border: 1px solid #00000022; background: {{c.cor}}"></div>
+              <div style="font-size: 11px; color: #53635e">{{c.rot}}</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #16211e">{{c.cor}}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background: {{t.bg}}; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 14px; font-family: {{t.fUi}}; color: {{t.ink}}; flex-grow: 1">
+          <div style="background: {{t.surface}}; border: 2px solid {{t.accent}}; border-radius: {{t.radius}}; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-size: 16px; line-height: 1.45">Em 2027, este item deve custar <b style="font-family: {{t.fNum}}; font-size: 19px">R$ 97,28</b> para a empresa, <span style="color: {{t.down}}; font-weight: 600">2,3% mais barato</span> que hoje.</div>
+            <div style="font-size: 12px; color: {{t.muted}}">A nota fica em R$ 103,83.</div>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: flex-start">
+            <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-width: 0">
+              <div style="font-size: 13px; font-weight: 600">O que vai fazer com o produto?</div>
+              <div style="display: flex; gap: 6px">
+                <button type="button" style="font: inherit; font-size: 13px; padding: 8px 10px; min-height: 36px; border-radius: {{t.radius}}; border: 1.5px solid {{t.accent}}; background: {{t.accent}}; color: {{t.onAccent}}">Revender</button>
+                <button type="button" style="font: inherit; font-size: 13px; padding: 8px 10px; min-height: 36px; border-radius: {{t.radius}}; border: 1.5px solid {{t.lineStrong}}; background: {{t.surface}}; color: {{t.ink}}">Produção</button>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-width: 0">
+              <label style="font-size: 13px; font-weight: 600">Alíquota do ICMS</label>
+              <div style="display: flex; border: 1.5px solid {{t.lineStrong}}; border-radius: {{t.radius}}; background: {{t.surface}}; min-height: 36px; overflow: hidden">
+                <span style="flex: 1; padding: 8px 10px; font-family: {{t.fNum}}; font-size: 14px">18</span>
+                <span style="padding: 8px 10px; border-left: 1px solid {{t.line}}; color: {{t.muted}}; font-family: {{t.fNum}}; font-size: 13px">%</span>
+              </div>
+              <span style="align-self: flex-start; font-size: 11px; padding: 2px 7px; border-radius: 5px; border: 1px dashed {{t.warnInk}}; background: {{t.warnBg}}; color: {{t.warnInk}}">Não muda o custo</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap">
+            <span style="font-family: {{t.fNum}}; font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid {{t.lineStrong}}; background: {{t.surface}}">2026 · hoje</span>
+            <span style="font-family: {{t.fNum}}; font-size: 12px; padding: 5px 10px; border-radius: 999px; background: {{t.ink}}; color: {{t.bg}}">2027</span>
+            <span style="font-family: {{t.fNum}}; font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid {{t.lineStrong}}; background: {{t.surface}}">2028</span>
+            <span style="font-family: {{t.fNum}}; font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid {{t.lineStrong}}; background: {{t.surface}}">2033</span>
+            <span style="margin-left: auto; font-family: {{t.fNum}}; font-size: 12px; padding: 5px 10px; color: {{t.up}}">+1,4% (exemplo de alta)</span>
+          </div>
+        </div>
+        <div style="padding: 12px 24px; font-size: 12px; color: #53635e; border-top: 1px solid #e3e8e5; display: flex; justify-content: space-between; gap: 12px">
+          <span>Texto: {{t.fUiNome}} · Números: {{t.fNumNome}}</span>
+          <span>{{t.modo}}</span>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2860}}'>
+const TEMAS = [
+  { nome:'Claro', tag:'Referência', modo:'Fundo claro', uso:'O tema atual. Neutro e limpo, para o dia a dia no escritório.',
+    bg:'#f3f5f4', surface:'#ffffff', line:'#d5dcd9', lineStrong:'#9fb0aa', ink:'#16211e', muted:'#53635e', accent:'#0d5c55', accentSoft:'#e1efec', onAccent:'#ffffff', up:'#a23b25', down:'#1d6b3a', warnBg:'#fbf3e2', warnInk:'#6f4c0c', radius:'8px',
+    fUi:"'Instrument Sans', sans-serif", fNum:"'IBM Plex Mono', monospace", fUiNome:'Instrument Sans', fNumNome:'IBM Plex Mono' },
+  { nome:'Escuro', tag:'Referência', modo:'Fundo escuro', uso:'O par escuro do tema atual, para telas à noite ou ambientes com pouca luz.',
+    bg:'#101615', surface:'#18201e', line:'#2c3835', lineStrong:'#4b5d58', ink:'#e4ebe8', muted:'#9db0aa', accent:'#5fc2b5', accentSoft:'#1d3532', onAccent:'#0b1413', up:'#ef8a72', down:'#79cf95', warnBg:'#2d2616', warnInk:'#e6c27a', radius:'8px',
+    fUi:"'Instrument Sans', sans-serif", fNum:"'IBM Plex Mono', monospace", fUiNome:'Instrument Sans', fNumNome:'IBM Plex Mono' },
+  { nome:'Retrô', tag:'Referência', modo:'Fundo claro', uso:'Formulário contínuo de impressora matricial: papel zebrado verde e letra de máquina.',
+    bg:'#e6eedf', surface:'#f7f9f1', line:'#b9c9ad', lineStrong:'#8fa883', ink:'#2b2b26', muted:'#5a6152', accent:'#2f6b3a', accentSoft:'#d6e5cc', onAccent:'#f7f9f1', up:'#9b2f1f', down:'#2f6b3a', warnBg:'#f1e7c9', warnInk:'#6a4d0b', radius:'2px',
+    fUi:"'Courier Prime', monospace", fNum:"'Courier Prime', monospace", fUiNome:'Courier Prime', fNumNome:'Courier Prime' },
+  { nome:'Planilha', tag:'Novo', modo:'Fundo claro', uso:'Cara de planilha: cinza de grade, verde de célula selecionada. Familiar para quem vive no Excel.',
+    bg:'#f3f3f3', surface:'#ffffff', line:'#d4d4d4', lineStrong:'#a6a6a6', ink:'#1f1f1f', muted:'#5c5c5c', accent:'#1e6b42', accentSoft:'#e3f1e8', onAccent:'#ffffff', up:'#b3261e', down:'#1e6b42', warnBg:'#fff4ce', warnInk:'#6b4e00', radius:'2px',
+    fUi:"'Source Sans 3', sans-serif", fNum:"'Source Code Pro', monospace", fUiNome:'Source Sans 3', fNumNome:'Source Code Pro' },
+  { nome:'Alto contraste', tag:'Novo', modo:'Fundo escuro', uso:'Preto, branco e amarelo, com letra feita para leitura fácil. Para quem enxerga pouco ou usa a tela no sol.',
+    bg:'#000000', surface:'#0d0d0d', line:'#8a8a8a', lineStrong:'#ffffff', ink:'#ffffff', muted:'#e0e0e0', accent:'#ffd600', accentSoft:'#2a2400', onAccent:'#000000', up:'#ff9e94', down:'#7dff8f', warnBg:'#ffd600', warnInk:'#000000', radius:'6px',
+    fUi:"'Atkinson Hyperlegible', sans-serif", fNum:"'Atkinson Hyperlegible Mono', monospace", fUiNome:'Atkinson Hyperlegible', fNumNome:'Atkinson Hyperlegible Mono' },
+  { nome:'Litoral', tag:'Novo', modo:'Fundo claro', uso:'Azul-mar e branco, leve e arejado. Bom para apresentar números ao fornecedor.',
+    bg:'#eef4f7', surface:'#ffffff', line:'#cfdde5', lineStrong:'#8eaabb', ink:'#0f2633', muted:'#4a6170', accent:'#0b5f86', accentSoft:'#dcebf3', onAccent:'#ffffff', up:'#b23a2b', down:'#1b6e4b', warnBg:'#fdf0d8', warnInk:'#6e4a08', radius:'12px',
+    fUi:"'Figtree', sans-serif", fNum:"'JetBrains Mono', monospace", fUiNome:'Figtree', fNumNome:'JetBrains Mono' },
+  { nome:'Café', tag:'Novo', modo:'Fundo escuro', uso:'Marrom torrado com caramelo. Um escuro quente, que cansa menos a vista que o preto.',
+    bg:'#1d1612', surface:'#271e18', line:'#3e3128', lineStrong:'#6b5646', ink:'#f1e6dc', muted:'#bba696', accent:'#e0a35a', accentSoft:'#3a2a1b', onAccent:'#1d1612', up:'#f39a86', down:'#a4d892', warnBg:'#3a2c14', warnInk:'#f0cf86', radius:'10px',
+    fUi:"'Bricolage Grotesque', sans-serif", fNum:"'DM Mono', monospace", fUiNome:'Bricolage Grotesque', fNumNome:'DM Mono' },
+  { nome:'Lavanda', tag:'Novo', modo:'Fundo claro', uso:'Lilás suave com roxo firme nos destaques. Calmo, para longas sessões de análise.',
+    bg:'#f5f3fa', surface:'#ffffff', line:'#ddd7ea', lineStrong:'#a59cbd', ink:'#221d33', muted:'#5c5670', accent:'#5b3fa8', accentSoft:'#ece6f8', onAccent:'#ffffff', up:'#a8323a', down:'#2a6b4c', warnBg:'#fbf0dc', warnInk:'#6c4a0c', radius:'14px',
+    fUi:"'Manrope', sans-serif", fNum:"'IBM Plex Mono', monospace", fUiNome:'Manrope', fNumNome:'IBM Plex Mono' },
+  { nome:'Meia-noite', tag:'Novo', modo:'Fundo escuro', uso:'Azul-marinho profundo com ciano. Um escuro mais frio e tecnológico que o Escuro padrão.',
+    bg:'#0b1020', surface:'#121a30', line:'#26314f', lineStrong:'#475478', ink:'#e6ebf7', muted:'#a3aecb', accent:'#5cc8f0', accentSoft:'#13314a', onAccent:'#07101c', up:'#ff9b9b', down:'#7fe0a6', warnBg:'#2c2614', warnInk:'#f1d17e', radius:'10px',
+    fUi:"'Sora', sans-serif", fNum:"'IBM Plex Mono', monospace", fUiNome:'Sora', fNumNome:'IBM Plex Mono' },
+  { nome:'Cerrado', tag:'Novo', modo:'Fundo claro', uso:'Terra, ocre e pau-brasil. Quente e brasileiro, sem perder a leitura dos números.',
+    bg:'#f2eee8', surface:'#ffffff', line:'#ddd3c4', lineStrong:'#ad9c86', ink:'#2a2118', muted:'#66584a', accent:'#9a4a12', accentSoft:'#f4e3d4', onAccent:'#ffffff', up:'#a8291c', down:'#3d6b2a', warnBg:'#f7ebcf', warnInk:'#6a4a0a', radius:'6px',
+    fUi:"'Work Sans', sans-serif", fNum:"'JetBrains Mono', monospace", fUiNome:'Work Sans', fNumNome:'JetBrains Mono' }
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      temas: TEMAS.map((t) => ({
+        ...t,
+        tagBg: t.tag === 'Novo' ? '#0d5c55' : '#e3e8e5',
+        tagInk: t.tag === 'Novo' ? '#ffffff' : '#3f4d48',
+        chips: [
+          { rot: 'Fundo', cor: t.bg }, { rot: 'Superfície', cor: t.surface }, { rot: 'Texto', cor: t.ink },
+          { rot: 'Destaque', cor: t.accent }, { rot: 'Alta', cor: t.up }, { rot: 'Baixa', cor: t.down }
+        ]
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
