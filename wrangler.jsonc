@@ -1,7 +1,7 @@
 {
   // Publica SOMENTE a pasta publico/ (portal + ferramentas liberadas).
   // O resto do repositório (painéis com dados internos, docs) não vai para o site.
-  "name": "ferramentas-comerciais",
+  "name": "otimizacao-comercial",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./publico",
