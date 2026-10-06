@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ferramentas Comerciais</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f3f5f4;--surface:#fff;--line:#d5dcd9;--ink:#16211e;--muted:#53635e;--accent:#0d5c55}
+@media (prefers-color-scheme:dark){:root{--bg:#101615;--surface:#18201e;--line:#2c3835;--ink:#e4ebe8;--muted:#9db0aa;--accent:#5fc2b5;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:48px 20px}
+h1{font-size:2rem;margin:0 0 6px}
+p.lede{color:var(--muted);margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+a.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;color:inherit;text-decoration:none}
+a.card:hover,a.card:focus-visible{border-color:var(--accent);outline:none}
+a.card h2{font-size:1.1rem;margin:0 0 6px;color:var(--accent)}
+a.card p{margin:0;color:var(--muted);font-size:.92rem}
+footer{margin-top:40px;color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Ferramentas Comerciais</h1>
+<p class="lede">Ferramentas de apoio para o time comercial.</p>
+<div class="grid">
+<a class="card" href="calculadora-cbs-ibs/"><h2>Calculadora CBS/IBS de Compras</h2><p>Compara o custo de uma compra hoje (ICMS, ST, IPI, PIS/COFINS) com o mesmo item em 2027.</p></a>
+</div>
+<footer>Simulações sem valor fiscal.</footer>
+</div>
+</body>
+</html>

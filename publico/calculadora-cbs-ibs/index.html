@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Calculadora CBS/IBS de Compras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Courier+Prime:wght@400;700&family=Source+Sans+3:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Atkinson+Hyperlegible:wght@400;700&family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Bricolage+Grotesque:wght@400;600;700&family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700&family=Sora:wght@400;600;700&family=Work+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: passo 1 (essencial) e passo 2 (recolhido) à esquerda; resposta em frase + números à direita; barra fixa de custo no celular */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --line:#d5dcd9; --line-strong:#9fb0aa;
+  --ink:#16211e; --muted:#53635e; --accent:#0d5c55; --accent-soft:#e1efec; --on-accent:#ffffff;
+  --up:#a23b25; --down:#1d6b3a; --warn-bg:#fbf3e2; --warn-ink:#6f4c0c;
+  --r:8px; --f-ui:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101615; --surface:#18201e; --line:#2c3835; --line-strong:#4b5d58;
+  --ink:#e4ebe8; --muted:#9db0aa; --accent:#5fc2b5; --accent-soft:#1d3532; --on-accent:#0b1413;
+  --up:#ef8a72; --down:#79cf95; --warn-bg:#2d2616; --warn-ink:#e6c27a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101615; --surface:#18201e; --line:#2c3835; --line-strong:#4b5d58;
+  --ink:#e4ebe8; --muted:#9db0aa; --accent:#5fc2b5; --accent-soft:#1d3532; --on-accent:#0b1413;
+  --up:#ef8a72; --down:#79cf95; --warn-bg:#2d2616; --warn-ink:#e6c27a; color-scheme:dark}
+/* Temas escolhidos pelo usuário (seletor "Tema") */
+html:root[data-tema="claro"]{--bg:#f3f5f4;--surface:#ffffff;--line:#d5dcd9;--line-strong:#9fb0aa;--ink:#16211e;--muted:#53635e;--accent:#0d5c55;--accent-soft:#e1efec;--on-accent:#ffffff;--up:#a23b25;--down:#1d6b3a;--warn-bg:#fbf3e2;--warn-ink:#6f4c0c;--r:8px;--f-ui:'Instrument Sans',system-ui,sans-serif;--f-num:'IBM Plex Mono',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="escuro"]{--bg:#101615;--surface:#18201e;--line:#2c3835;--line-strong:#4b5d58;--ink:#e4ebe8;--muted:#9db0aa;--accent:#5fc2b5;--accent-soft:#1d3532;--on-accent:#0b1413;--up:#ef8a72;--down:#79cf95;--warn-bg:#2d2616;--warn-ink:#e6c27a;--r:8px;--f-ui:'Instrument Sans',system-ui,sans-serif;--f-num:'IBM Plex Mono',ui-monospace,monospace;color-scheme:dark}
+html:root[data-tema="retro"]{--bg:#e6eedf;--surface:#f7f9f1;--line:#b9c9ad;--line-strong:#8fa883;--ink:#2b2b26;--muted:#5a6152;--accent:#2f6b3a;--accent-soft:#d6e5cc;--on-accent:#f7f9f1;--up:#9b2f1f;--down:#2f6b3a;--warn-bg:#f1e7c9;--warn-ink:#6a4d0b;--r:2px;--f-ui:'Courier Prime',system-ui,sans-serif;--f-num:'Courier Prime',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="planilha"]{--bg:#f3f3f3;--surface:#ffffff;--line:#d4d4d4;--line-strong:#a6a6a6;--ink:#1f1f1f;--muted:#5c5c5c;--accent:#1e6b42;--accent-soft:#e3f1e8;--on-accent:#ffffff;--up:#b3261e;--down:#1e6b42;--warn-bg:#fff4ce;--warn-ink:#6b4e00;--r:2px;--f-ui:'Source Sans 3',system-ui,sans-serif;--f-num:'Source Code Pro',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="contraste"]{--bg:#000000;--surface:#0d0d0d;--line:#8a8a8a;--line-strong:#ffffff;--ink:#ffffff;--muted:#e0e0e0;--accent:#ffd600;--accent-soft:#2a2400;--on-accent:#000000;--up:#ff9e94;--down:#7dff8f;--warn-bg:#ffd600;--warn-ink:#000000;--r:6px;--f-ui:'Atkinson Hyperlegible',system-ui,sans-serif;--f-num:'Atkinson Hyperlegible Mono',ui-monospace,monospace;color-scheme:dark}
+html:root[data-tema="litoral"]{--bg:#eef4f7;--surface:#ffffff;--line:#cfdde5;--line-strong:#8eaabb;--ink:#0f2633;--muted:#4a6170;--accent:#0b5f86;--accent-soft:#dcebf3;--on-accent:#ffffff;--up:#b23a2b;--down:#1b6e4b;--warn-bg:#fdf0d8;--warn-ink:#6e4a08;--r:12px;--f-ui:'Figtree',system-ui,sans-serif;--f-num:'JetBrains Mono',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="cafe"]{--bg:#1d1612;--surface:#271e18;--line:#3e3128;--line-strong:#6b5646;--ink:#f1e6dc;--muted:#bba696;--accent:#e0a35a;--accent-soft:#3a2a1b;--on-accent:#1d1612;--up:#f39a86;--down:#a4d892;--warn-bg:#3a2c14;--warn-ink:#f0cf86;--r:10px;--f-ui:'Bricolage Grotesque',system-ui,sans-serif;--f-num:'DM Mono',ui-monospace,monospace;color-scheme:dark}
+html:root[data-tema="lavanda"]{--bg:#f5f3fa;--surface:#ffffff;--line:#ddd7ea;--line-strong:#a59cbd;--ink:#221d33;--muted:#5c5670;--accent:#5b3fa8;--accent-soft:#ece6f8;--on-accent:#ffffff;--up:#a8323a;--down:#2a6b4c;--warn-bg:#fbf0dc;--warn-ink:#6c4a0c;--r:14px;--f-ui:'Manrope',system-ui,sans-serif;--f-num:'IBM Plex Mono',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="meianoite"]{--bg:#0b1020;--surface:#121a30;--line:#26314f;--line-strong:#475478;--ink:#e6ebf7;--muted:#a3aecb;--accent:#5cc8f0;--accent-soft:#13314a;--on-accent:#07101c;--up:#ff9b9b;--down:#7fe0a6;--warn-bg:#2c2614;--warn-ink:#f1d17e;--r:10px;--f-ui:'Sora',system-ui,sans-serif;--f-num:'IBM Plex Mono',ui-monospace,monospace;color-scheme:dark}
+html:root[data-tema="cerrado"]{--bg:#f2eee8;--surface:#ffffff;--line:#ddd3c4;--line-strong:#ad9c86;--ink:#2a2118;--muted:#66584a;--accent:#9a4a12;--accent-soft:#f4e3d4;--on-accent:#ffffff;--up:#a8291c;--down:#3d6b2a;--warn-bg:#f7ebcf;--warn-ink:#6a4a0a;--r:6px;--f-ui:'Work Sans',system-ui,sans-serif;--f-num:'JetBrains Mono',ui-monospace,monospace;color-scheme:light}
+html:root[data-tema="retro"] body{background-image:repeating-linear-gradient(var(--bg) 0 28px,#dbe7d0 28px 56px)}
+
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.5}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:24px 48px}
+@media (max-width:900px){.wrap{padding-inline:16px;padding-bottom:110px}}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:20px}
+h1{font-size:clamp(1.55rem,2.6vw,2.1rem);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.lede{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.presets{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.presets .lbl{font-size:.85rem;color:var(--muted)}
+.btn{border:1px solid var(--line-strong);background:var(--surface);border-radius:var(--r);padding:9px 14px;font-size:.92rem;font-weight:500;min-height:44px}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.grid{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.inputs{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 18px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.step-h{display:flex;align-items:baseline;gap:10px}
+.step-n{font-family:var(--f-num);font-weight:600;color:var(--on-accent);background:var(--accent);border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;font-size:.9rem;flex:none}
+.step-h h2{font-size:1.1rem;margin:0}
+.step-h p{margin:0;color:var(--muted);font-size:.88rem}
+
+details.step>summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:10px;min-height:44px}
+details.step>summary .step-n{margin-top:1px}
+details.step>summary .chev{align-self:center}
+details.step>summary::-webkit-details-marker{display:none}
+details.step>summary .chev{margin-left:auto;font-size:.85rem;color:var(--accent);font-weight:600;white-space:nowrap}
+details.step[open]>summary .chev .a{display:none}
+details.step:not([open])>summary .chev .f{display:none}
+details.step:not([open]){gap:0}
+
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.q{font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.q .opt{font-weight:400;color:var(--muted);font-size:.85rem}
+.info{border:1px solid var(--line-strong);background:var(--bg);border-radius:50%;width:24px;height:24px;font-size:.78rem;font-weight:700;line-height:1;display:inline-grid;place-items:center;color:var(--accent);position:relative}
+.info::after{content:"";position:absolute;inset:-10px}
+.help{font-size:.86rem;color:var(--ink);background:var(--accent-soft);border-radius:var(--r);padding:8px 10px;margin:0}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:420px){.row3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.inp{display:flex;align-items:stretch;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);overflow:hidden;min-height:46px}
+.inp:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.inp .af{display:grid;place-items:center;padding:0 10px;color:var(--muted);font-family:var(--f-num);font-size:.9rem;background:var(--surface);flex:none}
+.inp .af.pre{border-right:1px solid var(--line)} .inp .af.suf{border-left:1px solid var(--line)}
+.inp input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font-family:var(--f-num);font-size:1.02rem;padding:0 10px;font-variant-numeric:tabular-nums}
+.inp input:focus{outline:none}
+.inp input::placeholder{color:var(--muted);opacity:.6}
+select{width:100%;min-height:46px;font:inherit;font-size:.95rem;padding:0 10px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);color:var(--ink)}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line-strong);background:var(--surface);border-radius:var(--r);padding:8px 12px;min-height:44px;font-size:.92rem;font-weight:500;flex:1 1 auto;text-align:center}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.seg.small button{min-height:38px;padding:6px 10px;font-size:.86rem}
+
+.destline{font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:-6px}
+.destline b{color:var(--ink)}
+.linkbtn{border:0;background:none;color:var(--accent);text-decoration:underline;font-size:.9rem;padding:8px 4px;min-height:36px}
+.icmsrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
+.icmsrow #icmsRedBox{grid-column:1/-1}
+.icmsrow .seg button{min-width:58px}
+.icmsrow select{min-height:46px;font-size:.88rem}
+.icmsrow .q{white-space:nowrap;flex-wrap:nowrap;min-height:26px}
+@media (max-width:440px){.icmsrow{grid-template-columns:minmax(0,1fr) auto}.icmsrow #icmsRedBox{grid-column:1/-1}}
+.calc .efetivo{color:var(--ink);background:var(--accent-soft);border-radius:4px;padding:0 6px}
+.calc .efetivo b{color:var(--accent)}
+
+.row2 .q,.row3 .q{white-space:nowrap}
+button.aviso{display:inline-block;width:auto}
+.aviso .more{margin-left:4px}
+.calc .kv{white-space:nowrap}
+#tl{min-width:0}
+@media (max-width:560px){#tl th,#tl td{padding:7px 6px;font-size:.82rem}#tl th{font-size:.66rem}}
+.calc{font-size:.88rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;margin:0}
+.calc b{color:var(--ink);font-family:var(--f-num);font-weight:500}
+.sub{display:flex;flex-direction:column;gap:14px;border-left:3px solid var(--accent-soft);padding-left:12px}
+
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;min-height:44px;padding-top:4px;cursor:pointer}
+.check input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+
+.aviso{align-self:flex-start;display:inline-flex;gap:6px;align-items:baseline;text-align:left;font-size:.8rem;line-height:1.4;color:var(--warn-ink);background:var(--warn-bg);border:1px dashed currentColor;border-radius:6px;padding:3px 8px}
+.aviso .why{display:none}
+.aviso[aria-expanded="true"] .why{display:inline}
+.aviso .more{text-decoration:underline;white-space:nowrap}
+.aviso[aria-expanded="true"] .more{display:none}
+
+.results{display:flex;flex-direction:column;gap:20px;min-width:0}
+@media (min-width:901px){.results{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}}
+.years{display:flex;flex-wrap:wrap;gap:6px}
+.years button{border:1.5px solid var(--line-strong);background:var(--surface);padding:6px 12px;border-radius:999px;font-family:var(--f-num);font-size:.92rem;min-height:40px}
+.years button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.phase{font-size:.88rem;color:var(--muted);margin:6px 0 0}
+
+.answer{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r);padding:18px 20px}
+.answer .lead{font-size:1.15rem;line-height:1.45;margin:0;text-wrap:pretty}
+.answer .lead b{font-family:var(--f-num);font-size:1.25em;white-space:nowrap}
+.answer .negocia{margin:12px 0 0;font-size:.95rem;background:var(--accent-soft);border-radius:var(--r);padding:10px 12px}
+.answer .negocia b{font-family:var(--f-num)}
+.answer .exp{font-size:.86rem;color:var(--muted);margin:10px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+@media (max-width:560px){.kpis{grid-template-columns:minmax(0,1fr)}}
+.kpi{border-top:1px solid var(--line);padding-top:8px}
+.kpi .l{font-size:.8rem;color:var(--muted)}
+.kpi .v{font-family:var(--f-num);font-size:1.15rem;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:.8rem;color:var(--muted);font-family:var(--f-num)}
+.up{color:var(--up)} .down{color:var(--down)}
+
+h3.sec{font-size:1.02rem;margin:0 0 8px}
+.danfe{background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;overflow-x:auto}
+.danfe table{border-collapse:collapse;width:100%;min-width:520px}
+.danfe th,.danfe td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.danfe th:first-child,.danfe td:first-child{text-align:left;white-space:normal}
+.danfe thead th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+.danfe td{font-family:var(--f-num);font-size:.9rem}
+.danfe td:first-child{font-family:var(--f-ui);font-size:.9rem}
+.danfe tr.grp td{background:var(--bg);font-family:var(--f-ui);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.danfe tr.tot td{font-weight:600;border-top:1.5px solid var(--ink)}
+.danfe tr.zero td{color:var(--muted);opacity:.65}
+.danfe td small{color:var(--muted);font-size:.76rem}
+.danfe tr.sel td{background:var(--accent-soft)}
+.cred{font-family:var(--f-ui);font-size:.7rem;color:var(--warn-ink);background:var(--warn-bg);border-radius:4px;padding:1px 5px;margin-left:4px}
+
+details.more-box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+details.more-box>summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:600;color:var(--accent)}
+details.more-box[open]{padding-bottom:16px}
+.method{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.method{grid-template-columns:minmax(0,1fr)}}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0}
+.card h4{font-size:.95rem;margin:0 0 6px}
+.card p,.card li{font-size:.86rem;margin:0 0 6px}
+.card ul{padding-left:18px;margin:0}
+code.fx{display:block;font-family:var(--f-num);font-size:.78rem;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;margin:4px 0 6px;white-space:pre-wrap;overflow-wrap:anywhere}
+.note{background:var(--warn-bg);color:var(--warn-ink);border-radius:var(--r);padding:10px 12px;font-size:.86rem;margin:0}
+.sources{font-size:.85rem}.sources a{color:var(--accent)}
+
+.bar{display:none}
+@media (max-width:900px){
+  .bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--ink);color:var(--bg);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));gap:12px;align-items:center;justify-content:space-between;border:0;width:100%;text-align:left}
+  .bar .t{font-size:.78rem;opacity:.8}
+  .bar .v{font-family:var(--f-num);font-size:1.2rem;font-weight:600}
+  .bar .go{font-size:.85rem;text-decoration:underline;white-space:nowrap}
+}
+footer{margin-top:28px;border-top:1px solid var(--line);padding-top:14px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.prefs{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.sw{display:inline-flex;gap:4px;align-items:center}
+.sw button{width:36px;height:36px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;padding:0}
+.sw button span{width:22px;height:22px;border-radius:50%;display:block;box-shadow:0 0 0 1px var(--line-strong)}
+.sw button[aria-pressed="true"] span{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div>
+    <h1>Calculadora CBS/IBS de Compras</h1>
+    <p class="lede">Preencha os dados da nota de compra como ela é hoje. A calculadora mostra quanto o mesmo item vai custar em 2027, com a CBS e o IBS.</p>
+  </div>
+  <div class="presets">
+    <label class="lbl" for="temaSel">Tema:</label>
+    <select id="temaSel" style="width:auto;min-width:170px">
+      <option value="auto">Automático (claro/escuro)</option><option value="claro">Claro</option><option value="escuro">Escuro</option><option value="retro">Retrô</option><option value="planilha">Planilha</option><option value="contraste">Alto contraste</option><option value="litoral">Litoral</option><option value="cafe">Café</option><option value="lavanda">Lavanda</option><option value="meianoite">Meia-noite</option><option value="cerrado">Cerrado</option>
+    </select>
+    <span class="lbl" style="margin-left:6px">Ver exemplo:</span>
+    <button class="btn" type="button" data-preset="normal">Sem ST</button>
+    <button class="btn" type="button" data-preset="st">Com ST</button>
+    <button class="btn" type="button" data-preset="limpar">Limpar tudo</button>
+  </div>
+</header>
+
+<div class="grid">
+<form class="inputs" id="form" autocomplete="off" onsubmit="return false">
+
+  <section class="step" aria-labelledby="p1">
+    <div class="step-h"><span class="step-n">1</span><div><h2 id="p1">Dados da nota</h2><p>O básico para calcular.</p></div></div>
+
+    <div class="f" id="f-dest">
+      <div class="destline">Destinação: <b id="destNome">Revenda</b> <button type="button" class="linkbtn" id="destAlt" aria-expanded="false" aria-controls="destBox">Alterar</button></div>
+      <div id="destBox" class="sub" hidden>
+        <div class="seg small" id="dest" role="group" aria-label="Destinação do produto">
+          <button type="button" data-v="revenda">Revenda</button>
+          <button type="button" data-v="uso">Uso interno / consumo</button>
+        </div>
+        <p class="calc" style="margin:0">Na revenda a empresa recupera o ICMS e o PIS/COFINS. No uso interno, não.</p>
+      </div>
+    </div>
+
+    <div class="f" id="f-P">
+      <label class="q" for="P">Valor do produto na nota <button type="button" class="info" data-help="h-P" aria-expanded="false" aria-label="Ajuda">?</button></label>
+      <p class="help" id="h-P" hidden>O valor do produto (unitário ou do item inteiro), como aparece na nota, sem somar IPI nem ST.</p>
+      <div class="inp"><span class="af pre">R$</span><input type="text" id="P" inputmode="decimal" placeholder="0,00"></div>
+    </div>
+
+    <div class="f" id="f-icms">
+      <div class="icmsrow">
+        <div class="f" id="f-icmsAliq">
+          <label class="q" for="icmsAliq">ICMS <button type="button" class="info" data-help="h-icms" aria-expanded="false" aria-label="Ajuda sobre alíquota">?</button></label>
+          <div class="inp"><input type="text" id="icmsAliq" inputmode="decimal" placeholder="18"><span class="af suf">%</span></div>
+        </div>
+        <div class="f" id="f-icmsRedQ">
+          <div class="q">Redução de base? <button type="button" class="info" data-help="h-red" aria-expanded="false" aria-label="Ajuda sobre redução">?</button></div>
+          <div class="seg" id="icmsTemRed" role="group" style="flex-wrap:nowrap">
+            <button type="button" data-v="0">Não</button>
+            <button type="button" data-v="1">Sim</button>
+          </div>
+        </div>
+        <div id="icmsRedBox">
+          <div class="f" id="f-icmsIn">
+            <label class="q" for="redSel">ICMS efetivo após a redução</label>
+            <select id="redSel">
+              <option value="">Escolha…</option>
+              <option value="12">12%</option>
+              <option value="8.8">8,8%</option>
+              <option value="7">7%</option>
+              <option value="5.6">5,6%</option>
+              <option value="outro">Outro percentual de redução…</option>
+            </select>
+            <div id="redOutro" hidden>
+            <div class="seg small" id="icmsMode" role="group" hidden><button type="button" data-v="red">%</button></div>
+            <div class="inp"><span class="af pre" id="icmsPre" hidden>R$</span><input type="text" id="icmsIn" inputmode="decimal" placeholder="0" aria-label="Percentual de redução da base"><span class="af suf" id="icmsSuf">%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="help" id="h-icms" hidden>O percentual de ICMS destacado na nota. Dentro de SP costuma ser 18%; de outros estados, 7%, 12% ou 4% (importados).</p>
+      <p class="help" id="h-red" hidden>Alguns produtos têm o ICMS calculado sobre só uma parte do valor. Escolha na lista o ICMS efetivo que fica depois da redução (cargas usadas no Anexo II do RICMS/SP); a calculadora acha o percentual de redução a partir da alíquota informada. Se não estiver na lista, use "Outro percentual".</p>
+      <p class="calc" id="c-icms"></p>
+      <label class="check" id="f-redFim" hidden><input type="checkbox" id="redFim" checked> <span>Considerar que a redução acaba em 2027. <span class="opt">Os benefícios do Anexo II do RICMS/SP valem até 31/12/2026; se não forem prorrogados, o ICMS volta à alíquota cheia.</span></span></label>
+    </div>
+
+    <div class="f" id="f-st">
+      <div class="q">A nota tem ICMS-ST (substituição tributária)? <button type="button" class="info" data-help="h-st" aria-expanded="false" aria-label="Ajuda">?</button></div>
+      <p class="help" id="h-st" hidden>Na ST, o fornecedor já cobra na nota o ICMS da venda seguinte. Aparece no quadro de impostos como "Base de cálculo ICMS ST" e "Valor do ICMS ST".</p>
+      <div class="seg" id="st" role="group">
+        <button type="button" data-v="0">Não</button>
+        <button type="button" data-v="1">Sim</button>
+      </div>
+    </div>
+
+    <div class="sub" id="stbox">
+      <div class="f" id="f-stTipo">
+        <div class="q">Como a ST é calculada? <button type="button" class="info" data-help="h-sttipo" aria-expanded="false" aria-label="Ajuda">?</button></div>
+        <p class="help" id="h-sttipo" hidden>Por MVA, a base da ST é o preço mais uma margem em %. Por pauta, o estado fixa a base em reais por unidade (pauta fiscal ou PMPF), e o preço do produto não muda a base. É um ou outro: veja na nota ou na tabela do estado.</p>
+        <div class="seg" id="stTipo" role="group">
+          <button type="button" data-v="mva">Por MVA (%)</button>
+          <button type="button" data-v="pauta">Por pauta (R$)</button>
+        </div>
+      </div>
+      <div class="f" id="f-pautaIn">
+        <label class="q" for="pautaIn">Valor da pauta por unidade <button type="button" class="info" data-help="h-pauta" aria-expanded="false" aria-label="Ajuda">?</button></label>
+        <p class="help" id="h-pauta" hidden>O valor fixado pelo estado para a base da ST, por unidade. Use a mesma unidade do valor do produto (se o produto está por caixa, a pauta também por caixa).</p>
+        <div class="inp"><span class="af pre">R$</span><input type="text" id="pautaIn" inputmode="decimal" placeholder="0,00"></div>
+        <p class="calc" id="c-pauta"></p>
+      </div>
+      <div class="f" id="f-stIn">
+        <div class="q">Qual informação da ST você tem? <button type="button" class="info" data-help="h-stmode" aria-expanded="false" aria-label="Ajuda">?</button></div>
+        <p class="help" id="h-stmode" hidden>Escolha o que estiver mais fácil: o valor da ST na nota, o percentual da ST sobre o produto, o MVA (margem do estado) ou a base da ST. A calculadora descobre o resto.</p>
+        <div class="seg small" id="stMode" role="group">
+          <button type="button" data-v="valor">Valor da ST</button>
+          <button type="button" data-v="pct">% da ST</button>
+          <button type="button" data-v="mva">MVA</button>
+          <button type="button" data-v="base">Base da ST</button>
+        </div>
+        <div class="inp"><span class="af pre" id="stPre">R$</span><input type="text" id="stIn" inputmode="decimal" placeholder="0,00" aria-label="Valor da ST"><span class="af suf" id="stSuf" hidden>%</span></div>
+        <p class="calc" id="c-st"></p>
+      </div>
+      <div class="f" id="f-stAliq">
+        <label class="q" for="stAliq">Alíquota do ICMS no estado de destino <button type="button" class="info" data-help="h-stal" aria-expanded="false" aria-label="Ajuda">?</button></label>
+        <p class="help" id="h-stal" hidden>A alíquota interna do estado onde o produto será vendido. Em SP, normalmente 18%.</p>
+        <div class="inp"><input type="text" id="stAliq" inputmode="decimal" placeholder="18"><span class="af suf">%</span></div>
+      </div>
+    </div>
+
+    <div class="f" id="f-ipiIn">
+      <div class="q">IPI na nota <span class="opt">(deixe 0 se não tiver)</span> <button type="button" class="info" data-help="h-ipi" aria-expanded="false" aria-label="Ajuda">?</button></div>
+      <p class="help" id="h-ipi" hidden>O IPI aparece quando o fornecedor é indústria ou importador. Informe o percentual ou o valor, como estiver na nota.</p>
+      <div class="seg small" id="ipiMode" role="group">
+        <button type="button" data-v="aliq">Em %</button>
+        <button type="button" data-v="valor">Em R$</button>
+      </div>
+      <div class="inp"><span class="af pre" id="ipiPre" hidden>R$</span><input type="text" id="ipiIn" inputmode="decimal" placeholder="0" aria-label="IPI"><span class="af suf" id="ipiSuf">%</span></div>
+      <p class="calc" id="c-ipi"></p>
+    </div>
+  </section>
+
+  <details class="step" id="mais">
+    <summary><span class="step-n">2</span><div class="step-h" style="display:block"><h2>Mais opções</h2><p>Opcional. Frete, desconto, redução da base da ST, PIS/COFINS e alíquota da CBS.</p></div><span class="chev"><span class="a">Abrir</span><span class="f">Fechar</span></span></summary>
+
+    <div class="row3">
+      <div class="f" id="f-F"><label class="q" for="F">Frete</label><div class="inp"><span class="af pre">R$</span><input type="text" id="F" inputmode="decimal" placeholder="0,00"></div></div>
+      <div class="f" id="f-D"><label class="q" for="D">Despesas</label><div class="inp"><span class="af pre">R$</span><input type="text" id="D" inputmode="decimal" placeholder="0,00"></div></div>
+      <div class="f" id="f-Desc"><label class="q" for="Desc">Desconto</label><div class="inp"><span class="af pre">R$</span><input type="text" id="Desc" inputmode="decimal" placeholder="0,00"></div></div>
+    </div>
+
+    <div class="f" id="f-stRed">
+      <label class="q" for="stRed">Redução de base da ST <span class="opt">(só com ST)</span></label>
+      <div class="inp"><input type="text" id="stRed" inputmode="decimal" placeholder="0"><span class="af suf">%</span></div>
+    </div>
+
+    <div class="row2">
+      <div class="f" id="f-pis"><label class="q" for="pis">PIS</label><div class="inp"><input type="text" id="pis" inputmode="decimal"><span class="af suf">%</span></div></div>
+      <div class="f" id="f-cofins"><label class="q" for="cofins">COFINS</label><div class="inp"><input type="text" id="cofins" inputmode="decimal"><span class="af suf">%</span></div></div>
+    </div>
+    <p class="calc">Padrão do Lucro Real: 1,65% + 7,6% = 9,25%. Produto monofásico ou com alíquota zero: 0.</p>
+
+    <div class="row2">
+      <div class="f" id="f-cbsRef"><label class="q" for="cbsRef">Alíquota da CBS</label><div class="inp"><input type="text" id="cbsRef" inputmode="decimal"><span class="af suf">%</span></div></div>
+      <div class="f" id="f-ibsRef" hidden><label class="q" for="ibsRef">Alíquota do IBS</label><div class="inp"><input type="text" id="ibsRef" inputmode="decimal"><span class="af suf">%</span></div></div>
+    </div>
+    <p class="calc">Estimativa. O Senado ainda vai fixar a alíquota da CBS; ajuste quando sair a resolução. Em 2027 o IBS é fixo em 0,1%.</p>
+
+    <div class="f" id="f-redAliq">
+      <label class="q" for="redAliq">O produto tem alíquota reduzida na reforma?</label>
+      <select id="redAliq"><option value="0">Não (alíquota padrão)</option><option value="30">Sim, redução de 30%</option><option value="60">Sim, redução de 60% (ex.: alimentos, saúde)</option><option value="100">Alíquota zero (ex.: cesta básica)</option></select>
+    </div>
+
+    <div class="f">
+      <label class="check" id="f-precoNeutro"><input type="checkbox" id="precoNeutro"> <span>Considerar que o fornecedor tira do preço os impostos que acabam (PIS/COFINS e a parte do ICMS que cai). <span class="opt">Desmarcado: o preço do produto na nota continua o mesmo em 2027.</span></span></label>
+      <label class="check" id="f-manterIPI"><input type="checkbox" id="manterIPI"> <span>Manter o IPI depois de 2027 (produto com fábrica na Zona Franca de Manaus)</span></label>
+      <label class="check" id="f-cbsNaBaseIcms"><input type="checkbox" id="cbsNaBaseIcms"> <span>Somar CBS/IBS na base do ICMS e da ST (como a SEFAZ-SP entende)</span></label>
+    </div>
+  </details>
+</form>
+
+<section class="results" id="resultado" aria-live="polite">
+  <div>
+    <div class="years" id="years" role="group" aria-label="Ano de comparação" hidden></div>
+    <h3 class="sec" style="margin:0">Comparação: hoje (2026) × 2027</h3>
+    <p class="phase" id="phase"></p>
+  </div>
+
+  <div class="answer">
+    <p class="lead" id="frase"></p>
+    <p class="negocia" id="negocia" hidden></p>
+    <p class="exp">Custo líquido é o que a compra custa de verdade: o total da nota menos os impostos que a empresa recupera como crédito.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Custo líquido</div><div class="v" id="kCusto"></div><div class="s" id="kCustoD"></div></div>
+      <div class="kpi"><div class="l">Total da nota</div><div class="v" id="kNF"></div><div class="s" id="kNFD"></div></div>
+      <div class="kpi"><div class="l">Créditos recuperados</div><div class="v" id="kCr"></div><div class="s" id="kCrD"></div></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="sec">Hoje × 2027, lado a lado</h3>
+    <div class="danfe"><table id="tl"></table></div>
+  </div>
+
+  <details class="more-box">
+    <summary>Ver o cálculo detalhado, imposto por imposto</summary>
+    <div class="danfe"><table id="cmp"></table></div>
+  </details>
+
+  <details class="more-box">
+    <summary>Como é calculado e fontes</summary>
+    <div class="method">
+      <div class="card"><h4>Hoje (até 2026)</h4>
+        <code class="fx">Valor da operação = produto + frete + despesas − desconto
+IPI = valor da operação × alíq. IPI
+Base ICMS = (valor da operação [+ IPI se uso interno]) × (1 − redução)
+ICMS = base ICMS × alíquota
+PIS/COFINS = (valor da operação − ICMS) × alíquota</code></div>
+      <div class="card"><h4>Substituição tributária</h4>
+        <code class="fx">Por MVA:   Base ST = (valor da operação + IPI) × (1 + MVA) × (1 − red. ST)
+Por pauta: Base ST = pauta por unidade × (1 − red. ST)
+ICMS-ST = base ST × alíq. destino − ICMS próprio
+% ST = ICMS-ST ÷ valor do produto</code>
+        <p>Por MVA, com o valor, o % ou a base da ST, a calculadora encontra o MVA equivalente e o reaplica em 2027. Por pauta, a base fica fixa: se o preço cair em 2027, a ST sobe.</p></div>
+      <div class="card"><h4>CBS e IBS (2027 em diante)</h4>
+        <code class="fx">Base CBS/IBS = valor da operação − ICMS (sem IPI)
+CBS = base × alíq. CBS     IBS = base × alíq. IBS
+Total da nota = operação + IPI + ICMS-ST + CBS + IBS</code>
+        <p>CBS e IBS são cobrados por fora, somados ao total da nota (LC 214/2025, art. 12).</p></div>
+      <div class="card"><h4>Cronograma</h4><ul>
+        <li><b>2026:</b> CBS 0,9% e IBS 0,1% só destacados (teste), sem custo.</li>
+        <li><b>2027:</b> PIS/COFINS acabam; CBS cheia − 0,1 p.p.; IBS 0,1%; IPI zerado (exceto ZFM); ICMS igual.</li>
+        <li><b>2028 em diante:</b> ainda depende de definições. Entra na calculadora quando as regras estiverem fechadas.</li></ul></div>
+      <div class="card"><h4>Créditos (empresa no Lucro Real)</h4><ul>
+        <li><b>ICMS:</b> sem ST, para revenda ou produção.</li>
+        <li><b>IPI:</b> só para produção.</li>
+        <li><b>PIS/COFINS:</b> base sem ICMS destacado (Lei 14.592/2023) e sem ICMS-ST (STJ, Tema 1231); inclui IPI não recuperável. Uso interno não gera crédito.</li>
+        <li><b>CBS/IBS:</b> crédito integral, inclusive para uso interno.</li></ul></div>
+      <div class="card"><h4>Fontes</h4><ul class="sources">
+        <li><a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank" rel="noopener">Lei Complementar 214/2025</a></li>
+        <li><a href="https://www.migalhas.com.br/depeso/465114/reforma-tributaria--ibs-e-cbs-em-2027-aliquotas-e-proximos-passos" target="_blank" rel="noopener">Migalhas: IBS e CBS em 2027</a></li>
+        <li><a href="https://simplifique.contmatic.com.br/blogs/aliquota-referencia-ibs-cbs-cgibs-estima-27-91" target="_blank" rel="noopener">Contmatic: Resolução CGIBS 14/2026</a></li>
+        <li><a href="https://www.legisweb.com.br/legislacao/?id=486926" target="_blank" rel="noopener">SEFAZ-SP, Consulta 32303/2025</a></li>
+        <li><a href="https://conjur.com.br/2026-out-01/icms-st-no-ibs-e-na-cbs-o-valor-retido-nao-limita-a-exclusao/" target="_blank" rel="noopener">Conjur: ICMS-ST na base do IBS e da CBS</a></li></ul></div>
+    </div>
+  </details>
+
+  <p class="note">Simulação para negociação, sem valor fiscal. As alíquotas de CBS e IBS ainda são estimativas. Confirme o enquadramento de cada item (NCM, CST) com o fiscal.</p>
+</section>
+</div>
+
+<footer>
+  <span>Atualizado em outubro de 2026. Nada do que você digita sai do seu navegador.</span>
+</footer>
+</div>
+
+<button type="button" class="bar" id="bar"><span><span class="t" id="barT"></span><br><span class="v" id="barV"></span> <span id="barD"></span></span><span class="go">Ver resultado ↓</span></button>
+<script>
+// Núcleo de cálculo — função pura (usada na página e no teste)
+// Foco atual: hoje (2026) x 2027. As regras de 2028–2033 seguem abaixo para uso futuro.
+const ANOS = [2026, 2027];
+const FATOR_ICMS = { 2026: 1, 2027: 1, 2028: 1, 2029: 0.9, 2030: 0.8, 2031: 0.7, 2032: 0.6, 2033: 0 };
+const FRACAO_IBS = { 2029: 0.1, 2030: 0.2, 2031: 0.3, 2032: 0.4, 2033: 1 };
+
+function r2(x) { return Math.round((x + Number.EPSILON) * 100) / 100; }
+
+// Resolve os campos dinâmicos (ICMS, IPI, ST) a partir do campo "informado" (driver)
+function resolver(i) {
+  const vop = i.P + i.F + i.D - i.Desc;
+  // IPI
+  let ipiAliq = i.ipiAliq;
+  if (i.ipiDriver === 'valor') ipiAliq = vop > 0 ? i.ipiValor / vop : 0;
+  const ipi = vop * ipiAliq;
+  // ICMS próprio
+  const baseCheia = vop + (i.dest === 'uso' ? ipi : 0);
+  let red = i.icmsRed, a = i.icmsAliq;
+  if (i.icmsDriver === 'base') red = baseCheia > 0 ? 1 - i.icmsBase / baseCheia : 0;
+  if (i.icmsDriver === 'valor') red = (a > 0 && baseCheia > 0) ? 1 - (i.icmsValor / a) / baseCheia : 0;
+  const icmsBase = baseCheia * (1 - red);
+  const icms = icmsBase * a;
+  // ST
+  let mva = i.stMva;
+  if (i.st && i.stTipo !== 'pauta') {
+    const pre = (vop + ipi) * (1 - i.stRed);
+    let valorST = null;
+    if (i.stDriver === 'base') mva = pre > 0 ? i.stBase / pre - 1 : 0;
+    if (i.stDriver === 'valor') valorST = i.stValor;
+    if (i.stDriver === 'pct') valorST = i.stPct * i.P;
+    if (valorST !== null) {
+      const baseST = i.stAliq > 0 ? (valorST + icms) / i.stAliq : 0;
+      mva = pre > 0 ? baseST / pre - 1 : 0;
+    }
+  }
+  return { ipiAliq, icmsRed: red, icmsAliq: a, stMva: mva };
+}
+
+function calcular(i, ano) {
+  const res = resolver(i);
+  const fy = FATOR_ICMS[ano];
+  const a0 = res.icmsAliq, red = res.icmsRed;
+  const redY = (ano >= 2027 && i.redFim) ? 0 : red; // benefício de redução que vence em 31/12/2026
+  const novo = ano >= 2027;
+
+  // preço do produto no ano
+  let P = i.P;
+  if (novo && i.precoModo === 'neutro') {
+    const icmsP0 = i.P * (1 - red) * a0;
+    const liq = i.P - icmsP0 - (i.pis + i.cofins) * (i.P - icmsP0);
+    const d = 1 - a0 * fy * (1 - redY);
+    P = d > 0 ? liq / d : i.P;
+  }
+  const vop = P + i.F + i.D - i.Desc;
+  const ipiAliq = novo ? (i.manterIPI ? res.ipiAliq : 0) : res.ipiAliq;
+  const ipi = vop * ipiAliq;
+
+  // alíquotas CBS/IBS do ano
+  const fr = 1 - i.redAliq;
+  let cbs = 0, ibs = 0;
+  if (ano === 2026) { cbs = 0.009; ibs = 0.001; }
+  else if (ano <= 2028) { cbs = Math.max(0, i.cbsRef - 0.001) * fr; ibs = 0.001 * fr; }
+  else { cbs = i.cbsRef * fr; ibs = i.ibsRef * FRACAO_IBS[ano] * fr; }
+  const t = cbs + ibs;
+
+  // ICMS próprio
+  const ay = a0 * fy;
+  const B0 = (vop + (i.dest === 'uso' ? ipi : 0)) * (1 - redY);
+  let icms;
+  const cbsNaBase = novo && i.cbsNaBaseIcms;
+  if (cbsNaBase) icms = ay * (B0 + (1 - redY) * t * vop) / (1 + ay * (1 - redY) * t);
+  else icms = ay * B0;
+  const icmsBase = ay > 0 ? icms / ay : 0;
+
+  // CBS/IBS — base: valor da operação sem IPI e sem ICMS (LC 214, art. 12)
+  const baseIVA = vop - icms;
+  const vCBS = cbs * baseIVA, vIBS = ibs * baseIVA;
+  const testeOnly = ano === 2026; // 2026: destaque informativo, compensável
+
+  // ST
+  let baseST = 0, st = 0;
+  if (i.st && fy > 0) {
+    const add = cbsNaBase ? (vCBS + vIBS) : 0;
+    if (i.stTipo === 'pauta') baseST = (i.stPauta || 0) * (1 - i.stRed); // pauta fiscal: base fixa em R$ por unidade
+    else baseST = (vop + ipi + add) * (1 + res.stMva) * (1 - i.stRed);
+    st = Math.max(0, baseST * i.stAliq * fy - icms);
+  }
+
+  // PIS/COFINS (só até 2026)
+  const basePC = novo ? 0 : vop - icms;
+  const pis = novo ? 0 : i.pis * basePC;
+  const cofins = novo ? 0 : i.cofins * basePC;
+
+  const totalNF = vop + ipi + st + (testeOnly ? 0 : vCBS + vIBS);
+
+  // créditos do comprador
+  const regular = i.regime !== 'simples';
+  const crICMS = (regular && !i.st && i.dest !== 'uso') ? icms : 0;
+  const crIPI = (regular && i.dest === 'industrializacao') ? ipi : 0;
+  let crPIS = 0, crCOFINS = 0, baseCrPC = 0;
+  if (!novo && i.regime === 'real' && i.dest !== 'uso') {
+    baseCrPC = vop - icms + (crIPI ? 0 : ipi); // ICMS destacado excluído (Lei 14.592/23); ICMS-ST fora (STJ Tema 1231)
+    crPIS = i.pis * baseCrPC; crCOFINS = i.cofins * baseCrPC;
+  }
+  const crCBS = (!testeOnly && regular) ? vCBS : 0;
+  const crIBS = (!testeOnly && regular) ? vIBS : 0;
+  const creditos = crICMS + crIPI + crPIS + crCOFINS + crCBS + crIBS;
+
+  return {
+    ano, P, vop, ipiAliq, ipi, icmsAliqAno: ay, icmsBase, icms, baseST, st,
+    basePC, pis, cofins, cbs, ibs, baseIVA, vCBS, vIBS, testeOnly,
+    totalNF, crICMS, crIPI, crPIS, crCOFINS, crCBS, crIBS, creditos,
+    custo: totalNF - creditos, resolvido: res
+  };
+}
+
+const $ = id => document.getElementById(id);
+const fmtR = v => (v < 0 ? '−' : '') + 'R$ ' + Math.abs(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtN = (v, d=2) => v.toLocaleString('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d});
+const fmtP = (v, d=2) => fmtN(v*100, d) + '%';
+function num(id){ let s = ($(id).value||'').trim().replace(/\s|R\$|%/g,''); if(!s) return 0;
+  if (s.includes(',')) s = s.replace(/\./g,'').replace(',', '.'); const n = parseFloat(s); return isFinite(n) ? n : 0; }
+
+// estado dos seletores
+const st8 = { icmsTemRed:false, dest:'revenda', st:false, stTipo:'mva', stMode:'valor', ipiMode:'aliq', icmsMode:'red' };
+const AFIX = { // [prefixo R$?, rótulo]
+  st:{valor:[true,'Valor da ST'],pct:[false,'% da ST sobre o produto'],mva:[false,'MVA'],base:[true,'Base da ST']},
+  ipi:{aliq:[false,'IPI %'],valor:[true,'Valor do IPI']},
+  icms:{red:[false,'Redução de base'],base:[true,'Base do ICMS'],valor:[true,'Valor do ICMS']}
+};
+function setSeg(id, v){ document.querySelectorAll('#'+id+' button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.v===String(v)))); }
+function setAffix(grp, mode){ const [rs,lbl]=AFIX[grp][mode]; $(grp+'Pre').hidden=!rs; $(grp+'Suf').hidden=rs; $(grp+'In').setAttribute('aria-label',lbl); $(grp+'In').placeholder = rs?'0,00':'0'; }
+
+const PRESETS = {
+  normal:{dest:'revenda',st:false,stTipo:'mva',pautaIn:'',stMode:'mva',ipiMode:'aliq',icmsMode:'red',icmsTemRed:false,P:'100,00',icmsAliq:'18',stIn:'40',stAliq:'18',ipiIn:'0',F:'',D:'',Desc:'',icmsIn:'0',stRed:'0',pis:'1,65',cofins:'7,6',cbsRef:'8,8',ibsRef:'17,7',redAliq:'0',precoNeutro:false,manterIPI:false,cbsNaBaseIcms:false},
+  st:{dest:'revenda',st:true,stTipo:'mva',pautaIn:'',stMode:'mva',ipiMode:'aliq',icmsMode:'red',icmsTemRed:false,P:'100,00',icmsAliq:'18',stIn:'40',stAliq:'18',ipiIn:'0',F:'',D:'',Desc:'',icmsIn:'0',stRed:'0',pis:'1,65',cofins:'7,6',cbsRef:'8,8',ibsRef:'17,7',redAliq:'0',precoNeutro:false,manterIPI:false,cbsNaBaseIcms:false},
+  limpar:{dest:'revenda',st:false,stTipo:'mva',pautaIn:'',stMode:'valor',ipiMode:'aliq',icmsMode:'red',icmsTemRed:false,P:'',icmsAliq:'18',stIn:'',stAliq:'18',ipiIn:'0',F:'',D:'',Desc:'',icmsIn:'0',stRed:'0',pis:'1,65',cofins:'7,6',cbsRef:'8,8',ibsRef:'17,7',redAliq:'0',precoNeutro:false,manterIPI:false,cbsNaBaseIcms:false}
+};
+function aplicarPreset(k){ const p=PRESETS[k]; $('redSel').value=''; $('redFim').checked=true;
+  for (const [id,v] of Object.entries(p)){ if(id in st8){ st8[id]=v; continue; } const el=$(id); if(!el) continue; if(el.type==='checkbox') el.checked=v; else el.value=v; }
+  atualizar(); }
+
+let anoSel = 2027;
+function lerInputs(){
+  const i = { P:num('P'), F:num('F'), D:num('D'), Desc:num('Desc'), dest:st8.dest, regime:'real',
+    icmsAliq:num('icmsAliq')/100, icmsRed:0, icmsBase:0, icmsValor:0, icmsDriver:st8.icmsMode,
+    ipiAliq:0, ipiValor:0, ipiDriver:st8.ipiMode,
+    st:st8.st, stAliq:num('stAliq')/100, redFim:st8.icmsTemRed&&$('redFim').checked, stTipo:st8.stTipo, stPauta:num('pautaIn'), stRed:num('stRed')/100, stMva:0, stBase:0, stValor:0, stPct:0, stDriver:st8.stMode,
+    pis:num('pis')/100, cofins:num('cofins')/100, cbsRef:num('cbsRef')/100, ibsRef:num('ibsRef')/100, redAliq:num('redAliq')/100,
+    precoModo:$('precoNeutro').checked?'neutro':'mesmo', manterIPI:$('manterIPI').checked, cbsNaBaseIcms:$('cbsNaBaseIcms').checked };
+  const ic=num('icmsIn'); if(st8.icmsMode==='red') i.icmsRed=ic/100; else if(st8.icmsMode==='base') i.icmsBase=ic; else i.icmsValor=ic;
+  const ip=num('ipiIn'); if(st8.ipiMode==='aliq') i.ipiAliq=ip/100; else i.ipiValor=ip;
+  const sv=num('stIn'); ({valor:()=>i.stValor=sv, pct:()=>i.stPct=sv/100, mva:()=>i.stMva=sv/100, base:()=>i.stBase=sv})[st8.stMode]();
+  return i;
+}
+// valor equivalente de cada modo (para trocar de modo sem mudar o resultado)
+function equivalente(grp, mode, hoje, inp){
+  const r=hoje.resolvido;
+  if(grp==='st') return {valor:fmtN(hoje.st), pct: inp.P? fmtN(hoje.st/inp.P*100):'0', mva:fmtN(r.stMva*100), base:fmtN(hoje.baseST)}[mode];
+  if(grp==='ipi') return {aliq:fmtN(r.ipiAliq*100), valor:fmtN(hoje.ipi)}[mode];
+  if(grp==='icms') return {red:fmtN(r.icmsRed*100), base:fmtN(hoje.icmsBase), valor:fmtN(hoje.icms)}[mode];
+}
+
+const FASE = {2026:'Hoje: PIS/COFINS, ICMS e IPI. CBS e IBS só aparecem na nota como teste, sem custo.',
+ 2027:'Em 2027 a CBS substitui PIS e COFINS, o IPI é zerado (exceto Zona Franca), o IBS fica em 0,1% e o ICMS não muda. Os anos seguintes entram quando as regras forem definidas.',
+ 2028:'Igual a 2027.', 2029:'ICMS cai para 90% da alíquota. IBS entra com 10%.', 2030:'ICMS a 80%. IBS a 20%.',
+ 2031:'ICMS a 70%. IBS a 30%.', 2032:'ICMS a 60%. IBS a 40%.', 2033:'ICMS acaba. Só CBS e IBS, integrais.'};
+
+function pct(a,b){ return b ? (a-b)/b : 0; }
+function delta(a,b){ if(!b) return ''; const d=pct(a,b); const cls=d>0.00005?'up':(d<-0.00005?'down':''); return '<span class="'+cls+'">'+(d>0?'+':'')+fmtN(d*100,1)+'%</span>'; }
+
+function atualizar(){
+  setSeg('dest',st8.dest); $('destNome').textContent={revenda:'Revenda',uso:'Uso interno / consumo',industrializacao:'Industrialização'}[st8.dest]; setSeg('st',st8.st?'1':'0'); setSeg('stMode',st8.stMode); setSeg('ipiMode',st8.ipiMode); setSeg('icmsMode',st8.icmsMode);
+  setAffix('st',st8.stMode); setAffix('ipi',st8.ipiMode); setAffix('icms',st8.icmsMode);
+  setSeg('icmsTemRed',st8.icmsTemRed?'1':'0'); $('icmsRedBox').hidden=!st8.icmsTemRed; $('f-redFim').hidden=!st8.icmsTemRed; $('redOutro').hidden=$('redSel').value!=='outro';
+  { const al=num('icmsAliq'); [...$('redSel').options].forEach(o=>{ const c=parseFloat(o.value); if(!isNaN(c)) o.textContent=fmtN(c, c%1?1:0)+'%'+(al>c?' (redução de '+fmtN((1-c/al)*100)+'%)':''); }); }
+  if(st8.icmsTemRed && $('redSel').value && $('redSel').value!=='outro'){ const carga=parseFloat($('redSel').value), al=num('icmsAliq'); $('icmsIn').value= al>carga ? fmtN((1-carga/al)*100) : '0'; }
+  $('stbox').hidden=!st8.st; setSeg('stTipo',st8.stTipo); $('f-pautaIn').hidden=st8.stTipo!=='pauta'; $('f-stIn').hidden=st8.stTipo==='pauta'; $('f-stRed').hidden=!st8.st;
+  const inp=lerInputs(); const hoje=calcular(inp,2026); const r=hoje.resolvido;
+
+  // linhas "calculado"
+  const temRed = st8.icmsTemRed && r.icmsRed>0.00001;
+  $('c-icms').innerHTML = (temRed ? '<span class="efetivo">ICMS efetivo <b>'+fmtP(r.icmsAliq*(1-r.icmsRed))+'</b></span>' : '') + '<span class="kv">Base do ICMS <b>'+fmtR(hoje.icmsBase)+'</b></span><span class="kv">Valor do ICMS <b>'+fmtR(hoje.icms)+'</b></span>';
+  $('c-ipi').innerHTML = st8.ipiMode==='aliq' ? '<span class="kv">Valor do IPI <b>'+fmtR(hoje.ipi)+'</b></span>' : '<span class="kv">Alíquota do IPI <b>'+fmtP(r.ipiAliq)+'</b></span>';
+  if(st8.st && st8.stTipo==='pauta'){ $('c-pauta').innerHTML='<span class="kv">Base da ST <b>'+fmtR(hoje.baseST)+'</b></span><span class="kv">Valor da ST <b>'+fmtR(hoje.st)+'</b></span><span class="kv">% da ST <b>'+(inp.P?fmtP(hoje.st/inp.P):'0,00%')+'</b></span>'; }
+  if(st8.st && st8.stTipo!=='pauta'){ const parts={valor:'Valor da ST <b>'+fmtR(hoje.st)+'</b>', pct:'% da ST <b>'+(inp.P?fmtP(hoje.st/inp.P):'0,00%')+'</b>', mva:'MVA <b>'+fmtP(r.stMva)+'</b>', base:'Base da ST <b>'+fmtR(hoje.baseST)+'</b>'};
+    $('c-st').innerHTML = 'Calculado: '+Object.entries(parts).filter(([k])=>k!==st8.stMode).map(([,v])=>'<span class="kv">'+v+'</span>').join(''); }
+
+  const todos=ANOS.map(a=>a===2026?hoje:calcular(inp,a)); const sel=todos[ANOS.indexOf(anoSel)];
+  $('years').innerHTML = ANOS.map(a=>'<button type="button" aria-pressed="'+(a===anoSel)+'" data-ano="'+a+'">'+(a===2026?'2026 · hoje':a)+'</button>').join('');
+  $('phase').textContent=FASE[anoSel];
+
+  // frase-resposta
+  const d=pct(sel.custo,hoje.custo); let fr;
+  if(!(inp.P>0)) fr='Informe o <b>valor do produto</b> no passo 1 para ver o resultado.';
+  else if(anoSel===2026) fr='Hoje este item custa <b>'+fmtR(hoje.custo)+'</b> para a empresa. A nota fica em '+fmtR(hoje.totalNF)+'. Escolha um ano acima para comparar.';
+  else { const comp = Math.abs(d)<0.0005 ? 'praticamente o mesmo que hoje' : (fmtN(Math.abs(d)*100,1)+'% '+(d>0?'mais caro':'mais barato')+' que hoje ('+fmtR(hoje.custo)+')');
+    fr='Em '+anoSel+', este item deve custar <b>'+fmtR(sel.custo)+'</b> para a empresa, '+comp+'. A nota fica em '+fmtR(sel.totalNF)+'.'; }
+  $('frase').innerHTML=fr;
+  let neg='';
+  if(inp.P>0 && inp.precoModo==='mesmo'){ const alt=calcular({...inp,precoModo:'neutro'},2027);
+    if(inp.P-alt.P>0.004) neg='Para negociar: se o fornecedor repassar o fim do PIS/COFINS, o preço do produto deveria cair para <b>'+fmtR(alt.P)+'</b> ('+fmtN((1-alt.P/inp.P)*100,2)+'% menos), e o custo líquido iria para '+fmtR(alt.custo)+'.'; }
+  $('negocia').innerHTML=neg; $('negocia').hidden=!neg;
+  $('kCusto').textContent=fmtR(sel.custo); $('kCustoD').innerHTML=anoSel===2026?'ano atual':'hoje '+fmtR(hoje.custo)+' · '+delta(sel.custo,hoje.custo);
+  $('kNF').textContent=fmtR(sel.totalNF); $('kNFD').innerHTML=anoSel===2026?'ano atual':'hoje '+fmtR(hoje.totalNF)+' · '+delta(sel.totalNF,hoje.totalNF);
+  $('kCr').textContent=fmtR(sel.creditos); $('kCrD').textContent=anoSel===2026?'ano atual':'hoje '+fmtR(hoje.creditos);
+  $('barT').textContent='Custo líquido em '+(anoSel===2026?'2026 (hoje)':anoSel);
+  $('barV').textContent=fmtR(sel.custo);
+  $('barD').textContent= anoSel===2026||!hoje.custo ? '' : '('+(d>0?'+':'')+fmtN(d*100,1)+'% vs hoje)';
+
+  // tabela detalhada
+  const cols = anoSel===2026 ? [hoje] : [hoje, sel];
+  const head='<thead><tr><th>Campo</th>'+cols.map(c=>'<th>'+(c.ano===2026?'Hoje (2026)':c.ano)+'</th>').join('')+'</tr></thead>';
+  const L=(rot,f,o={})=>{ const z=o.raw && cols.every(c=>Math.abs(o.raw(c))<0.005);
+    return '<tr class="'+(o.tot?'tot':'')+(z?' zero':'')+'"><td>'+rot+'</td>'+cols.map(f).map(v=>'<td>'+v+'</td>').join('')+'</tr>'; };
+  const G=t=>'<tr class="grp"><td colspan="'+(cols.length+1)+'">'+t+'</td></tr>';
+  const CRED={ipi:'crIPI',icms:'crICMS',pis:'crPIS',cofins:'crCOFINS'};
+  const tagC=' <span class="cred" title="Volta inteiro como crédito: não muda o custo">crédito integral</span>';
+  const marca=(c,k)=>{ const ck=CRED[k]; return (ck && c[k]>0.004 && c[ck]>=c[k]-0.005)?tagC:''; };
+  const R=(rot,k,al)=>L(rot,c=>fmtR(c[k])+(al?' <small>'+al(c)+'</small>':'')+marca(c,k),{raw:c=>c[k]});
+  const mIVA=(c,v,cr)=>(!c.testeOnly&&v>0.004&&Math.abs(cr-v)<0.005)?tagC:(c.testeOnly&&v>0.004?' <span class="cred">teste, sem custo</span>':'');
+  $('cmp').innerHTML=head+'<tbody>'+G('Produto e operação')+R('Valor do produto','P')+R('Valor da operação','vop')
+    +G('IPI')+R('IPI','ipi',c=>fmtP(c.ipiAliq))
+    +G('ICMS')+R('Base do ICMS','icmsBase')+R('ICMS próprio','icms',c=>fmtP(c.icmsAliqAno))+R('Base da ST','baseST')+R('ICMS-ST','st')
+    +G('PIS e COFINS (embutidos no preço)')+R('Base PIS/COFINS','basePC')+R('PIS','pis')+R('COFINS','cofins')
+    +G('CBS e IBS (somados à nota)')+R('Base CBS/IBS','baseIVA')
+    +L('CBS',c=>fmtR(c.vCBS)+' <small>'+fmtP(c.cbs)+'</small>'+mIVA(c,c.vCBS,c.crCBS),{raw:c=>c.vCBS})
+    +L('IBS',c=>fmtR(c.vIBS)+' <small>'+fmtP(c.ibs)+'</small>'+mIVA(c,c.vIBS,c.crIBS),{raw:c=>c.vIBS})
+    +L('Total da nota',c=>fmtR(c.totalNF),{tot:true})
+    +G('Créditos recuperados')+R('Crédito ICMS','crICMS')+R('Crédito IPI','crIPI')+R('Crédito PIS','crPIS')+R('Crédito COFINS','crCOFINS')+R('Crédito CBS','crCBS')+R('Crédito IBS','crIBS')
+    +L('Total de créditos',c=>fmtR(c.creditos),{tot:true})
+    +L('Custo líquido',c=>fmtR(c.custo)+(c.ano!==2026?' <small>'+delta(c.custo,hoje.custo)+'</small>':''),{tot:true})+'</tbody>';
+
+  const nx=todos[1];
+  const linhas=[['Valor do produto',c=>c.P],['ICMS + ICMS-ST',c=>c.icms+c.st],['IPI',c=>c.ipi],['PIS + COFINS',c=>c.pis+c.cofins],['CBS + IBS',c=>c.testeOnly?0:c.vCBS+c.vIBS],['Total da nota',c=>c.totalNF,1],['Créditos recuperados',c=>c.creditos],['Custo líquido',c=>c.custo,1]];
+  $('tl').innerHTML='<thead><tr><th>Item</th><th>Hoje (2026)</th><th>2027</th><th>Diferença</th></tr></thead><tbody>'+linhas.map(([r,f,t])=>{ const h=f(hoje), n=f(nx), d=n-h;
+    return '<tr class="'+(t?'tot':'')+'"><td>'+r+'</td><td>'+fmtR(h)+'</td><td>'+fmtR(n)+'</td><td>'+(Math.abs(d)<0.005?'—':(d>0?'+':'−')+fmtR(Math.abs(d)).replace('R$ ','R$ '))+'</td></tr>'; }).join('')+'</tbody>';
+
+  avisos(inp,todos);
+}
+
+// ---- avisos no próprio campo: o que não muda o custo ----
+function faixaAnos(a){ const r=[]; let ini=a[0],ant=a[0];
+  for(let k=1;k<=a.length;k++){ if(a[k]===ant+1){ant=a[k];continue;} r.push(ini===ant?String(ini):ini+' a '+ant); ini=ant=a[k]; } return r.join(', '); }
+function variantes(i){
+  const V=[], add=(host,grp,objs)=>V.push([host,grp,objs]);
+  add('f-P','P',[{...i,P:i.P+10}]); add('f-F','outros',[{...i,F:i.F+1}]); add('f-D','outros',[{...i,D:i.D+1}]); add('f-Desc','outros',[{...i,Desc:i.Desc+1}]);
+
+  add('f-icmsAliq','icms',[{...i,icmsAliq:i.icmsAliq+.01}]);
+  add('f-icmsIn','icms',[i.icmsDriver==='red'?{...i,icmsRed:i.icmsRed>=.9?i.icmsRed-.05:i.icmsRed+.05}:i.icmsDriver==='base'?{...i,icmsBase:i.icmsBase-1}:{...i,icmsValor:i.icmsValor-.5}]);
+  add('f-st','stToggle',[{...i,st:!i.st}]);
+  if(i.st){ add('f-stAliq','st',[{...i,stAliq:i.stAliq+.01}]); add('f-stRed','st',[{...i,stRed:i.stRed>=.9?i.stRed-.05:i.stRed+.05}]);
+    if(i.stTipo==='pauta') add('f-pautaIn','st',[{...i,stPauta:i.stPauta+1}]); else add('f-stIn','st',[{valor:{...i,stValor:i.stValor+1},pct:{...i,stPct:i.stPct+.01},mva:{...i,stMva:i.stMva+.05},base:{...i,stBase:i.stBase+1}}[i.stDriver]]); }
+  add('f-ipiIn','ipi',[i.ipiDriver==='aliq'?{...i,ipiAliq:i.ipiAliq+.01}:{...i,ipiValor:i.ipiValor+1}]);
+  add('f-pis','pis',[{...i,pis:i.pis+.005}]); add('f-cofins','pis',[{...i,cofins:i.cofins+.01}]);
+  add('f-cbsRef','iva',[{...i,cbsRef:i.cbsRef+.01}]); add('f-ibsRef','iva',[{...i,ibsRef:i.ibsRef+.01}]);
+  add('f-redAliq','iva',[{...i,redAliq:i.redAliq===0?.3:0}]);
+  if(i.icmsRed>0) add('f-redFim','toggle',[{...i,redFim:!i.redFim}]);
+  add('f-precoNeutro','toggle',[{...i,precoModo:i.precoModo==='neutro'?'mesmo':'neutro'}]);
+  add('f-manterIPI','manterIPI',[{...i,manterIPI:!i.manterIPI}]);
+  add('f-cbsNaBaseIcms','toggle',[{...i,cbsNaBaseIcms:!i.cbsNaBaseIcms}]);
+  return V;
+}
+function motivoSem(grp,i){
+  return ({iva:'CBS e IBS voltam inteiros como crédito. Mudam só o total da nota (quanto sai do caixa).',
+    pis:'O crédito de PIS/COFINS anula o efeito no custo.', ipi:'Na produção, o IPI volta como crédito.',
+    manterIPI:'O IPI informado é zero ou volta como crédito.', icms:i.st?'':'O ICMS volta como crédito.',
+    toggle:'Neste cenário o efeito volta como crédito.', st:(i.stDriver==='valor'||i.stDriver==='pct')?'Como você informou o valor da ST, este campo só serve para calcular o MVA.':'O valor da ST não muda neste cenário.'})[grp] || 'Neste cenário o valor volta como crédito ou não entra na conta.';
+}
+function motivoParcial(grp,anos){
+  const so26=anos.every(a=>a===2026), de27=anos.every(a=>a>=2027), ate32=!anos.includes(2033);
+  if(grp==='ipi'&&so26) return 'Depois de 2026 o IPI é zerado.';
+  if((grp==='st'||grp==='icms')&&so26) return 'Em 2027 o fornecedor ajusta o preço (opção em Mais opções) e o efeito se compensa.';
+  if(grp==='pis'&&de27) return 'Hoje já está embutido no preço; a partir de 2027 define quanto o fornecedor tira do preço.';
+  if(grp==='pis'&&so26) return 'A partir de 2027 o PIS e a COFINS acabam.';
+  if(grp==='dest'&&so26) return 'A partir de 2027 a CBS/IBS dá crédito em qualquer destinação.';
+  return '';
+}
+let avisoEls=[];
+function avisos(i,todos){
+  avisoEls.forEach(e=>e.remove()); avisoEls=[];
+  if(!(i.P>0)) return;
+  for(const [host,grp,vs] of variantes(i)){
+    const h=$(host); if(!h||h.closest('[hidden]')) continue;
+    const anosImp=ANOS.filter((a,ix)=>vs.some(v=>Math.abs(calcular(v,a).custo-todos[ix].custo)>0.004));
+    let curto=null, longo='';
+    if(!anosImp.length){ curto='Não muda o custo'; longo=motivoSem(grp,i); }
+    else if(anosImp.length<ANOS.length && !['stToggle','toggle','manterIPI','iva'].includes(grp)){ curto='Muda o custo só em '+faixaAnos(anosImp); longo=motivoParcial(grp,anosImp); }
+    if(!curto) continue;
+    const b=document.createElement('button'); b.type='button'; b.className='aviso'; b.setAttribute('aria-expanded','false');
+    b.innerHTML='<span>⚠ '+curto+(longo?'.':'')+'</span>'+(longo?' <span class="more">Por quê?</span><span class="why">'+longo+'</span>':'');
+    b.addEventListener('click',()=>b.setAttribute('aria-expanded',String(b.getAttribute('aria-expanded')!=='true')));
+    if(h.tagName==='LABEL') h.after(b); else h.appendChild(b);
+    avisoEls.push(b);
+  }
+}
+
+// ---- eventos ----
+document.addEventListener('input',()=>atualizar());
+document.addEventListener('change',e=>{ if(e.target.matches('input,select')) atualizar(); });
+function bindSeg(id,key,grp){ $(id).addEventListener('click',e=>{ const b=e.target.closest('button[data-v]'); if(!b) return;
+  if(grp && st8[key]!==b.dataset.v){ const inp=lerInputs(); const hoje=calcular(inp,2026); $(grp+'In').value=equivalente(grp,b.dataset.v,hoje,inp); }
+  st8[key]= key==='st' ? b.dataset.v==='1' : b.dataset.v; atualizar(); }); }
+bindSeg('dest','dest');
+$('icmsTemRed').addEventListener('click',e=>{ const b=e.target.closest('button[data-v]'); if(!b) return; st8.icmsTemRed=b.dataset.v==='1';
+  if(!st8.icmsTemRed){ st8.icmsMode='red'; $('icmsIn').value='0'; $('redSel').value=''; $('redFim').checked=true; } atualizar(); });
+$('stTipo').addEventListener('click',e=>{ const b=e.target.closest('button[data-v]'); if(!b||st8.stTipo===b.dataset.v) return;
+  const inp=lerInputs(); const hoje=calcular(inp,2026);
+  if(b.dataset.v==='pauta'){ if(!num('pautaIn')) $('pautaIn').value=fmtN(hoje.baseST); }
+  else { st8.stMode='mva'; $('stIn').value=fmtN(hoje.baseST && (hoje.vop+hoje.ipi)>0 ? (hoje.baseST/((hoje.vop+hoje.ipi)*(1-inp.stRed))-1)*100 : 0); }
+  st8.stTipo=b.dataset.v; atualizar(); }); bindSeg('st','st'); bindSeg('stMode','stMode','st'); bindSeg('ipiMode','ipiMode','ipi'); bindSeg('icmsMode','icmsMode','icms');
+$('years').addEventListener('click',e=>{ const b=e.target.closest('button[data-ano]'); if(!b) return; anoSel=+b.dataset.ano; atualizar(); });
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>aplicarPreset(b.dataset.preset)));
+document.querySelectorAll('.info').forEach(b=>b.addEventListener('click',e=>{ e.preventDefault(); const h=$(b.dataset.help); h.hidden=!h.hidden; b.setAttribute('aria-expanded',String(!h.hidden)); }));
+$('destAlt').addEventListener('click',()=>{ const bx=$('destBox'); bx.hidden=!bx.hidden; $('destAlt').setAttribute('aria-expanded',String(!bx.hidden)); $('destAlt').textContent=bx.hidden?'Alterar':'Fechar'; });
+$('bar').addEventListener('click',()=>$('resultado').scrollIntoView({behavior:'smooth',block:'start'}));
+
+// tema
+const root=document.documentElement;
+function lerPref(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function gravarPref(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function aplicarTema(t){ if(t&&t!=='auto') root.setAttribute('data-tema',t); else root.removeAttribute('data-tema'); $('temaSel').value=t||'auto'; }
+$('temaSel').addEventListener('change',e=>{ e.stopPropagation(); aplicarTema(e.target.value); gravarPref('calc-tema2',e.target.value); });
+aplicarTema(lerPref('calc-tema2')||'auto');
+
+aplicarPreset('st');
+</script>
+
+</body>
+</html>
